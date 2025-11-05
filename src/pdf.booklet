@@ -18,7 +18,7 @@ if [ "$pabaiga" == "$PLETINYS" ]; then
     result="$pradzia$PRIEDAS$PLETINYS"
     tmpFile="$pradzia$PRIEDAS$PLETTMP"
     echo "-dAutoRotatePages=/None -c \"<</Orientation 3>> setpagedevice\" -f $tmpFile" > "$TMPPARAM"
-    pdftops -level3 "$1" - | ps2ps - - | psbook -q | psnup -q -2 -pa4 > "$tmpFile"
+    pdftops -level3 "$1" - | ps2ps - - | psbook -q | psnup -q -2 -Pa4 -pa4 > "$tmpFile"
     ps2pdf @"$TMPPARAM" "$result"
     rm -f "$tmpFile"
     rm -f "$TMPPARAM"
