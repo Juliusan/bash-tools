@@ -1,0 +1,5 @@
+#!/bin/bash
+# Script to compile latex (.tex) file to pdf
+#    latex.compile <file>
+
+pdflatex -synctex=1 -interaction=nonstopmode "$1"
