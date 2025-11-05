@@ -1,0 +1,6 @@
+#!/bin/bash
+# Skriptas sumažinantis PDFo dydį.
+# pdf.makesmaller <įvesties failas> <išvesties failas>
+
+set -x
+gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -sOutputFile="$2" "$1"

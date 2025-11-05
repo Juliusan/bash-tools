@@ -1,0 +1,31 @@
+#!/bin/bash
+# Skriptas, paruošiantis PDFą spausdinti bukleto formatu.
+# booklet <pradinis pdfas>
+# argumento plėtinys turi būti PDF
+# rezultatas - failas toje pačioje vietoje su prieš plėtinį pridėtu Book
+
+PLETINYS=".pdf"
+PRIEDAS="R"
+PLETTMP=".ps"
+TMPPARAM="paramswqqwreqpopapaf.in"
+
+pozicija=$((${#1}-${#PLETINYS}))
+pradzia=${1:0:$pozicija}
+pabaiga=${1:$pozicija:${#PLETINYS}}
+
+if [ "$pabaiga" == "$PLETINYS" ]; then
+    result="$pradzia$PRIEDAS$PLETINYS"
+    pdftk "$1" cat 1-endeast output "$result"
+    for klaida in "${PIPESTATUS[@]}"; do
+        if [ $klaida -ne 0 ]; then
+            rm -f "$result"
+            exit $klaida
+        else
+            echo "PDF failas pasuktas sėkmingai: $result."
+            exit 0
+        fi
+    done
+else
+    echo "Failas ne PDF tipo!"
+    exit 1
+fi

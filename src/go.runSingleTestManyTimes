@@ -1,0 +1,59 @@
+#!/bin/bash -l
+
+#A script runs a single Golang test n times (n is a first parameter). The test is in folder, which
+#is provided as a second parameter and is named as provided in the third parameter. E.g.
+#    go.runSingleTestManyTimes 100 packages/name/tests TestSomething
+#The whole result is put into testFull.log failą (each run is separated by dedicated lines),
+#each failed run result is put into testError*.log failes.
+#
+#If the first parameter is "clean", the working directory is cleaned of files, created by this script,
+#and the script terminates.
+
+PILNO_LOG_FAILAS="testFull.log"         #FULL_LOG_FILE
+KLAIDOS_LOG_FAILO_PRADZIA="testError"   #ERROR_LOG_FILE_BEGINNING
+KLAIDOS_LOG_FAILO_PLETINYS=".log"       #ERROR_LOG_FILE_EXTENTION
+LAIKINAS_LOG_FAILAS="testTmp.log"       #TEMPORARY_LOG_FILE
+
+#Cleaning out trash
+rm -f $PILNO_LOG_FAILAS $LAIKINAS_LOG_FAILAS ${KLAIDOS_LOG_FAILO_PRADZIA}*${KLAIDOS_LOG_FAILO_PLETINYS}
+
+#Counts how many digits has n-1 - that many character places need to be reserved for error file index.
+if [ $1 = "clean" ]
+then
+    exit 0
+elif [ $1 -eq 1 ]
+then
+    skaitmenu=1     # digits
+elif [ $1 -gt 1 ]
+then
+    skaitmenu=0             # digits
+    likutis=$(($1-1))       # remainder
+    while [ $likutis -gt 0 ]
+    do
+        likutis=$(($likutis/10)) 
+        skaitmenu=$(($skaitmenu+1))
+    done
+fi
+
+wd=$PWD
+cd "$2"
+
+#Runs tests one by one
+klaidu=0    # errors
+for ((i=1; i<=$1; i++))
+do
+    echo "V=============V TEST $i OUT OF $1 V=============V" > "$wd"/$LAIKINAS_LOG_FAILAS
+    rezultatas=0    # result
+    go test -run "$3" >> "$wd"/$LAIKINAS_LOG_FAILAS || rezultatas=1
+    echo "A===============A END OF TEST $i A==============A" >> "$wd"/$LAIKINAS_LOG_FAILAS
+    cat "$wd"/$LAIKINAS_LOG_FAILAS >> "$wd"/$PILNO_LOG_FAILAS
+    if [ $rezultatas -eq 0 ]
+    then
+        echo Test $i out of $1 succeeded
+    else
+        echo Test $i out of $1 FAILED
+        index=`printf "%0*d" $skaitmenu $klaidu`
+        mv "$wd"/$LAIKINAS_LOG_FAILAS "$wd"/$KLAIDOS_LOG_FAILO_PRADZIA$index$KLAIDOS_LOG_FAILO_PLETINYS
+        klaidu=$(($klaidu+1))
+    fi
+done

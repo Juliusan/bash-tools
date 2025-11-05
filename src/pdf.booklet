@@ -1,0 +1,37 @@
+#!/bin/bash
+# Skriptas, paruošiantis PDFą spausdinti bukleto formatu.
+# pdf.booklet <pradinis pdfas>
+# argumento plėtinys turi būti PDF
+# rezultatas - failas toje pačioje vietoje su prieš plėtinį pridėtu Book
+# Reikalingas psutils paketas
+
+PLETINYS=".pdf"
+PRIEDAS="Book"
+PLETTMP=".ps"
+TMPPARAM="paramswqqwreqpopapaf.in"
+
+pozicija=$((${#1}-${#PLETINYS}))
+pradzia=${1:0:$pozicija}
+pabaiga=${1:$pozicija:${#PLETINYS}}
+
+if [ "$pabaiga" == "$PLETINYS" ]; then
+    result="$pradzia$PRIEDAS$PLETINYS"
+    tmpFile="$pradzia$PRIEDAS$PLETTMP"
+    echo "-dAutoRotatePages=/None -c \"<</Orientation 3>> setpagedevice\" -f $tmpFile" > "$TMPPARAM"
+    pdftops -level3 "$1" - | ps2ps - - | psbook -q | psnup -q -2 -pa4 > "$tmpFile"
+    ps2pdf @"$TMPPARAM" "$result"
+    rm -f "$tmpFile"
+    rm -f "$TMPPARAM"
+    for klaida in "${PIPESTATUS[@]}"; do
+        if [ $klaida -ne 0 ]; then
+            rm -f "$result"
+            exit $klaida
+        else
+            echo "Bukleto failas sukurtas sėkmingai: $result."
+            exit 0
+        fi
+    done
+else
+    echo "Failas ne PDF tipo!"
+    exit 1
+fi
