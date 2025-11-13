@@ -1,9 +1,23 @@
 #!/bin/bash
+
+# The script prepares pdf file to be printed as a booklet.
+#   pdf.booklet <input pdf>
+# An extension of the file provided in the parameter must be `pdf`. The result
+# is a pdf file in the same folder as the input file but with "Book" added to a
+# file name just before the extension. E.g. `pdf.booklet in.pdf` results in
+# file `inBook.pdf`. The file must be printed with short edge duplexing to
+# obtain correct booklet.
+# Packages `ghostscript`, `poppler-utils` and `psutils` are needed for this
+# script to work.
+
 # Skriptas, paruošiantis PDFą spausdinti bukleto formatu.
-# pdf.booklet <pradinis pdfas>
-# argumento plėtinys turi būti PDF
-# rezultatas - failas toje pačioje vietoje su prieš plėtinį pridėtu Book
-# Reikalingas psutils paketas
+#   pdf.booklet <pradinis pdfas>
+# Argumento plėtinys turi būti `pdf`. Rezultatas - failas toje pačioje vietoje
+# su prieš plėtinį pridėtu "Book". Pavyzdžiui, `pdf.booklet in.pdf` rezultatas
+# yra `inBook.pdf`. Failas turi būti spausdinamas apverstu (trumpo krašto)
+# dvipusiu spausdinimo būdu.
+# Kad skriptas veiktų, reikalingas `ghostscript`, `poppler-utils` ir `psutils`
+# paketai.
 
 PLETINYS=".pdf"
 PRIEDAS="Book"

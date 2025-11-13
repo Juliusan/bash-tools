@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Script to compile latex (.tex) file to pdf
 #    latex.compile <file>
 

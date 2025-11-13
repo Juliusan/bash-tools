@@ -1,8 +1,13 @@
 #!/bin/bash
-# Skriptas, paruošiantis PDFą spausdinti bukleto formatu.
-# booklet <pradinis pdfas>
-# argumento plėtinys turi būti PDF
-# rezultatas - failas toje pačioje vietoje su prieš plėtinį pridėtu Book
+
+# The script rotates each page of pdf file counter clockwise:
+#   pdf.rotate <input pdf>
+# The result is a pdf file in the same folder as the input file but with "R"
+# added to a file name just before the extension. E.g. `pdf.rotate in.pdf`
+# results in file `inR.pdf`.
+# The script can be used to correct orientation after printing to file several
+# slides in one page.
+# Package `pdftk` is needed for this script to work.
 
 PLETINYS=".pdf"
 PRIEDAS="R"

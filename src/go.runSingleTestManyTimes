@@ -1,13 +1,13 @@
 #!/bin/bash -l
 
-#A script runs a single Golang test n times (n is a first parameter). The test is in folder, which
-#is provided as a second parameter and is named as provided in the third parameter. E.g.
-#    go.runSingleTestManyTimes 100 packages/name/tests TestSomething
-#The whole result is put into testFull.log failą (each run is separated by dedicated lines),
-#each failed run result is put into testError*.log failes.
+# A script runs a single Golang test n times (n is a first parameter). The test is in folder, which
+# is provided as a second parameter and is named as provided in the third parameter. E.g.
+#     go.runSingleTestManyTimes 100 packages/name/tests TestSomething
+# The whole result is put into testFull.log file (each run is separated by dedicated lines),
+# each failed run result is put into testError*.log files.
 #
-#If the first parameter is "clean", the working directory is cleaned of files, created by this script,
-#and the script terminates.
+# If the first parameter is `clean`, the working directory is cleaned of files, created by this script,
+# and the script terminates.
 
 PILNO_LOG_FAILAS="testFull.log"         #FULL_LOG_FILE
 KLAIDOS_LOG_FAILO_PRADZIA="testError"   #ERROR_LOG_FILE_BEGINNING
@@ -30,7 +30,7 @@ then
     likutis=$(($1-1))       # remainder
     while [ $likutis -gt 0 ]
     do
-        likutis=$(($likutis/10)) 
+        likutis=$(($likutis/10))
         skaitmenu=$(($skaitmenu+1))
     done
 fi
